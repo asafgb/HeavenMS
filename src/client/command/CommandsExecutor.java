@@ -320,6 +320,8 @@ public class CommandsExecutor {
         addCommand("cake", 4, CakeCommand.class);
         addCommand("playernpcremove", 4, PlayerNpcRemoveCommand.class);
         addCommand("playernpc", 4, PlayerNpcCommand.class);
+        addCommand(new String[]{"permob", "pmob"}, 4, PermanentMobCommand.class);
+        addCommand(new String[]{"permnpc", "pnpc"}, 4, PermanentNPCCommand.class);
         
         commandsNameDesc.add(levelCommandsCursor);
     }
