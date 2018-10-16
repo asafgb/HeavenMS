@@ -245,7 +245,7 @@ public class MapleMapFactory {
             if (mobTime == -1) { //does not respawn, force spawn once
                 map.spawnMonster(monster);
             } else {
-                map.addMonsterSpawn(monster, mobTime, -1);
+                map.PermaddMonsterSpawn(monster, mobTime, -1);
             }
         }
         ps1.close();

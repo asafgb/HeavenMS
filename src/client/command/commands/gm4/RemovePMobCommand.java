@@ -15,11 +15,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import jdk.nashorn.internal.objects.NativeArray;
+import net.server.Server;
+import net.server.channel.Channel;
 import server.life.AbstractLoadedMapleLife;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.SpawnPoint;
+import server.maps.MapleMap;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 
@@ -101,38 +104,29 @@ public class RemovePMobCommand extends Command {
                     ps1.close();
                     
                     
-                    SpawnPoint removeMobSpawn = null;
-                    //Point newpos = player.getMap().CalcPointBelow(mob.getPosition());
-                    //newpos.y -= 1;
-                    for (SpawnPoint SP : player.getMap().GetMonsterSpawn()) {
                     
-                        if(SP.getMonster().getId() == mob.getId() &&
-                           SP.getMobTime() == Mobtime )
-                           /*SP.getF() == mob.getF() &&
-                           SP.getFh() == mob.getFh() &&
-                           SP.getPosition().x == mob.getPosition().x &&
-                           SP.getPosition().y == mob.getPosition().y)*/
-                        {
-                            removeMobSpawn = SP;
+
+                    for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                        SpawnPoint removeMobSpawn = null;
+                        MapleMap m = channel.getMapFactory().getMap(player.getMapId());
+                        for (SpawnPoint SP : m.GetMonsterSpawn()) {
+                    
+                            if(SP.getMonster().getId() == mob.getId() &&
+                               SP.getMobTime() == Mobtime )
+                            {
+                                removeMobSpawn = SP;
+                            }
+                            if(removeMobSpawn != null)
+                            {
+                                player.getMap().GetMonsterSpawn().remove(removeMobSpawn);
+                                player.getMap().damageMonster(player, removeMobSpawn.getMonster(), Integer.MAX_VALUE);
+                            }
+                            else
+                            {
+                                System.out.print("Cant Find that Spawn, Map: "+ player.getMap().getId() + " Mobs DB table Index: "+DBIndex);
+                            }
                         }
                     }
-                    if(removeMobSpawn != null)
-                    {
-                        player.getMap().GetMonsterSpawn().remove(removeMobSpawn);
-                        player.getMap().damageMonster(player, removeMobSpawn.getMonster(), Integer.MAX_VALUE);
-                    }
-                    else
-                    {
-                        System.out.print("Cant Find that Spawn, Map: "+ player.getMap().getId() + " Mobs DB table Index: "+DBIndex);
-                    }
-                    
-                    
-                    /*List<MapleMonster> lst= player.getMap().getMonsters();
-                    
-                    for (MapleMonster mons : lst) {
-                        
-                    }*/
-                    
                 }
                 else
                 {
@@ -148,9 +142,6 @@ public class RemovePMobCommand extends Command {
             {
                 x.printStackTrace();
             }
-
         }
-        
-
     }
 }

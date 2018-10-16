@@ -323,7 +323,7 @@ public class CommandsExecutor {
         addCommand(new String[]{"permob", "pmob"}, 4, PermanentMobCommand.class);
         addCommand(new String[]{"permnpc", "pnpc"}, 4, PermanentNPCCommand.class);
         addCommand("rpmob", 4, RemovePMobCommand.class);
-        
+        addCommand("rpnpc", 4, RemovePNpcCommand.class);
         
         commandsNameDesc.add(levelCommandsCursor);
     }

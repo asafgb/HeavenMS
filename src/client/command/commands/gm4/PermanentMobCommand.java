@@ -63,7 +63,7 @@ public class PermanentMobCommand extends Command {
                 ps.setInt(10, mobTime);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                c.getPlayer().dropMessage("Failed to save MOB to the database");
+                c.getPlayer().dropMessage("Failed to save MOB to the database"); 
             }
             
             for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {

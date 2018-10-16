@@ -8,6 +8,7 @@ package client.command.commands.gm4;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
+import java.awt.Point;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -55,14 +56,13 @@ public class PermanentNPCCommand extends Command {
             npc.setRx0(xpos + 50);
             npc.setRx1(xpos - 50);
             npc.setFh(fh);
-            //npc.setCustom(true);
+            npc.setPosition(new Point(player.getPosition().x, player.getPosition().y));
             try {
                 Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement("INSERT INTO npcs ( idd, f, fh, cy, rx0, rx1, x, y, mid ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )");
                 ps.setInt(1, npcId);
                 ps.setInt(2, f);
                 ps.setInt(3, fh);
-                ps.setInt(4, ypos);
                 ps.setInt(4, ypos);
                 ps.setInt(5, xpos + 50);
                 ps.setInt(6, xpos - 50);
@@ -81,6 +81,7 @@ public class PermanentNPCCommand extends Command {
                 
                 m.addMapObject(npc);
                 m.broadcastMessage(MaplePacketCreator.spawnNPC(npc));
+                
             }
         } else {
             c.getPlayer().dropMessage("You have entered an invalid Npc-Id");

@@ -3975,5 +3975,8 @@ public class MapleMap {
         }
     }
     
-    
+    public Collection<SpawnPoint> GetMonsterSpawn()
+    {
+        return PermMonsterSpawn;
+    }
 }
