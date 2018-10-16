@@ -11,8 +11,11 @@ import client.command.Command;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import net.server.Server;
+import net.server.channel.Channel;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
+import server.maps.MapleMap;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 
@@ -62,7 +65,11 @@ public class PermanentMobCommand extends Command {
             } catch (SQLException e) {
                 c.getPlayer().dropMessage("Failed to save MOB to the database");
             }
-            player.getMap().addMonsterSpawn(mob, mobTime,-1);
+            
+            for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                MapleMap m = channel.getMapFactory().getMap(player.getMapId());
+                           m.PermaddMonsterSpawn(mob, mobTime,-1);
+            }
         }
     }
 }

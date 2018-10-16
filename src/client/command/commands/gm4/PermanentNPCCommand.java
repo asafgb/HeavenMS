@@ -11,8 +11,11 @@ import client.command.Command;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import net.server.Server;
+import net.server.channel.Channel;
 import server.life.MapleLifeFactory;
 import server.life.MapleNPC;
+import server.maps.MapleMap;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 
@@ -67,14 +70,20 @@ public class PermanentNPCCommand extends Command {
                 ps.setInt(8, ypos);
                 ps.setInt(9, player.getMapId());
                 ps.executeUpdate();
+                
+                ps.close();
             } catch (SQLException e) {
                 c.getPlayer().dropMessage("Failed to save NPC to the database");
             }
-            player.getMap().addMapObject(npc);
-            player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
+            
+            for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                MapleMap m = channel.getMapFactory().getMap(player.getMapId());
+                
+                m.addMapObject(npc);
+                m.broadcastMessage(MaplePacketCreator.spawnNPC(npc));
+            }
         } else {
             c.getPlayer().dropMessage("You have entered an invalid Npc-Id");
         }
-
     }
 }

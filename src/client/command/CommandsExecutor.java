@@ -322,6 +322,8 @@ public class CommandsExecutor {
         addCommand("playernpc", 4, PlayerNpcCommand.class);
         addCommand(new String[]{"permob", "pmob"}, 4, PermanentMobCommand.class);
         addCommand(new String[]{"permnpc", "pnpc"}, 4, PermanentNPCCommand.class);
+        addCommand("rpmob", 4, RemovePMobCommand.class);
+        
         
         commandsNameDesc.add(levelCommandsCursor);
     }
