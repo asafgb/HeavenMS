@@ -80,7 +80,8 @@ public class PermanentNPCCommand extends Command {
                 MapleMap m = channel.getMapFactory().getMap(player.getMapId());
                 
                 m.addMapObject(npc);
-                m.broadcastMessage(MaplePacketCreator.spawnNPC(npc));
+                m.broadcastMessage(player,MaplePacketCreator.spawnNPC(npc));
+                
                 
             }
         } else {

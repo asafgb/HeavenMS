@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.server.Server;
 import net.server.channel.Channel;
 import server.life.MapleLifeFactory;
@@ -104,9 +106,9 @@ public class RemovePNpcCommand extends Command {
                     int rs1 = ps1.executeUpdate();
                     ps1.close();
                     
-                      for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                       for(Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
                         removeNpc=null;
-                        MapleMap m = channel.getMapFactory().getMap(player.getMapId());
+                        MapleMap m = channel.getMapFactory().getMap(player.getMap().getId());
                         List<MapleMapObject> lst= m.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.NPC));
                         for(MapleMapObject mmo : lst)
                         {
@@ -123,20 +125,23 @@ public class RemovePNpcCommand extends Command {
                         }
                          if(removeNpc!=null)
                            {
-                               //m.destroyNPC(rs1);
-                                m.removeMapObject(removeNpc.getObjectId());
+                                //m.removeMapObject(removeNpc.getObjectId());
+                               while(m.getNPCById(removeNpc.getId())!=null)
+                               {
+                                m.destroyNPC(removeNpc.getId());
                                 m.broadcastMessage(MaplePacketCreator.removeNPCController(removeNpc.getObjectId()));
                                 m.broadcastMessage(MaplePacketCreator.removeNPC(removeNpc.getObjectId()));
+                                //m.resetMapObjects();
                                //m.broadcastMessage(MaplePacketCreator.removeNPC(removeNpc.getObjectId()));
+                               }       
+                               //m.destroyNPC(removeNpc.getId());
                                player.dropMessage("The npc Deleted from ch: "+channel.getId());
                            }
                            else
                            {
                                player.dropMessage("Didnt Find that npc at ch: "+channel.getId()+" at map : "+m.getId());
                            }
-                        
                       }
-                    
                 }
                 else
                 {
