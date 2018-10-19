@@ -50,13 +50,7 @@ public class PermanentNPCCommand extends Command {
         else
             f=0;
         if (npc != null && !npc.getName().equals("MISSINGNO")) {
-            npc.setPosition(player.getPosition());
-            npc.setCy(ypos);
-            npc.setF(f);
-            npc.setRx0(xpos + 50);
-            npc.setRx1(xpos - 50);
-            npc.setFh(fh);
-            npc.setPosition(new Point(player.getPosition().x, player.getPosition().y));
+            
             try {
                 Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement("INSERT INTO npcs ( idd, f, fh, cy, rx0, rx1, x, y, mid ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )");
@@ -76,13 +70,20 @@ public class PermanentNPCCommand extends Command {
                 c.getPlayer().dropMessage("Failed to save NPC to the database");
             }
             
+            
             for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
-                MapleMap m = channel.getMapFactory().getMap(player.getMapId());
+                npc = MapleLifeFactory.getNPC(npcId);
+                npc.setPosition(player.getPosition());
+                npc.setCy(ypos);
+                npc.setF(f);
+                npc.setRx0(xpos + 50);
+                npc.setRx1(xpos - 50);
+                npc.setFh(fh);
+                npc.setPosition(new Point(player.getPosition().x, player.getPosition().y));
                 
+                MapleMap m = channel.getMapFactory().getMap(player.getMapId());
                 m.addMapObject(npc);
                 m.broadcastMessage(player,MaplePacketCreator.spawnNPC(npc));
-                
-                
             }
         } else {
             c.getPlayer().dropMessage("You have entered an invalid Npc-Id");

@@ -1639,7 +1639,6 @@ public class MapleMap {
                 if (((MapleNPC) obj).getId() == npcid) {
                     broadcastMessage(MaplePacketCreator.removeNPCController(obj.getObjectId()));
                     broadcastMessage(MaplePacketCreator.removeNPC(obj.getObjectId()));
-                    
                     this.mapobjects.remove(Integer.valueOf(obj.getObjectId()));
                 }
             }

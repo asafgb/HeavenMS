@@ -125,16 +125,10 @@ public class RemovePNpcCommand extends Command {
                         }
                          if(removeNpc!=null)
                            {
-                                //m.removeMapObject(removeNpc.getObjectId());
                                while(m.getNPCById(removeNpc.getId())!=null)
                                {
-                                m.destroyNPC(removeNpc.getId());
-                                m.broadcastMessage(MaplePacketCreator.removeNPCController(removeNpc.getObjectId()));
-                                m.broadcastMessage(MaplePacketCreator.removeNPC(removeNpc.getObjectId()));
-                                //m.resetMapObjects();
-                               //m.broadcastMessage(MaplePacketCreator.removeNPC(removeNpc.getObjectId()));
+                                    m.destroyNPC(removeNpc.getId());
                                }       
-                               //m.destroyNPC(removeNpc.getId());
                                player.dropMessage("The npc Deleted from ch: "+channel.getId());
                            }
                            else
