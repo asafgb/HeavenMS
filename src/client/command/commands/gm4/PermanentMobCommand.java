@@ -43,11 +43,7 @@ public class PermanentMobCommand extends Command {
         
         MapleMonster mob = MapleLifeFactory.getMonster(MobId);
         if (mob != null && !mob.getName().equals("MISSINGNO")) {
-            mob.setPosition(player.getPosition());
-            mob.setCy(player.getPosition().y);
-            mob.setRx0(player.getPosition().x + 50);
-            mob.setRx1(player.getPosition().x - 50);
-            mob.setFh(player.getMap().getFootholds().findBelow(player.getPosition()).getId());
+            
             try {
                 Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement("INSERT INTO mobs ( idd, f, fh, cy, rx0, rx1, x, y, mid, mobtime ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
@@ -67,6 +63,12 @@ public class PermanentMobCommand extends Command {
             }
             
             for (Channel channel : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                mob = MapleLifeFactory.getMonster(MobId);
+                mob.setPosition(player.getPosition());
+                mob.setCy(player.getPosition().y);
+                mob.setRx0(player.getPosition().x + 50);
+                mob.setRx1(player.getPosition().x - 50);
+                mob.setFh(player.getMap().getFootholds().findBelow(player.getPosition()).getId());
                 MapleMap m = channel.getMapFactory().getMap(player.getMapId());
                            m.PermaddMonsterSpawn(mob, mobTime,-1);
             }
