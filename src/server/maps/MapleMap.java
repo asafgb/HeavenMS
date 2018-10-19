@@ -100,7 +100,6 @@ public class MapleMap {
     private Map<Integer, MapleMapObject> mapobjects = new LinkedHashMap<>();
     private Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());
     private Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());
-    private Collection<SpawnPoint> PermMonsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());
     private AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
     private AtomicInteger droppedItemCount = new AtomicInteger(0);
     private Collection<MapleCharacter> characters = new LinkedHashSet<>();
@@ -1019,7 +1018,7 @@ public class MapleMap {
     
     private void spawnDrop(final Item idrop, final Point dropPos, final MapleMapObject dropper, final MapleCharacter chr, final byte droptype, final short questid) {
         final MapleMapItem mdrop = new MapleMapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
-        mdrop.setDropTime((int)(Server.getInstance().getCurrentTime()*0.99));
+        mdrop.setDropTime(Server.getInstance().getCurrentTime());
         spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
             @Override
             public void sendPackets(MapleClient c) {
@@ -1043,7 +1042,7 @@ public class MapleMap {
     public final void spawnMesoDrop(final int meso, final Point position, final MapleMapObject dropper, final MapleCharacter owner, final boolean playerDrop, final byte droptype) {
         final Point droppos = calcDropPos(position, position);
         final MapleMapItem mdrop = new MapleMapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
-        mdrop.setDropTime((int)(Server.getInstance().getCurrentTime()*0.99));
+        mdrop.setDropTime(Server.getInstance().getCurrentTime());
 
         spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
             @Override
@@ -1639,6 +1638,7 @@ public class MapleMap {
                 if (((MapleNPC) obj).getId() == npcid) {
                     broadcastMessage(MaplePacketCreator.removeNPCController(obj.getObjectId()));
                     broadcastMessage(MaplePacketCreator.removeNPC(obj.getObjectId()));
+                    
                     this.mapobjects.remove(Integer.valueOf(obj.getObjectId()));
                 }
             }
@@ -2947,16 +2947,6 @@ public class MapleMap {
         }
     }
     
-    public void PermaddMonsterSpawn(MapleMonster monster, int mobTime, int team) {
-        Point newpos = calcPointBelow(monster.getPosition());
-        newpos.y -= 1;
-        SpawnPoint sp = new SpawnPoint(monster, newpos, !monster.isMobile(), mobTime, mobInterval, team);
-        PermMonsterSpawn.add(sp);
-        if (sp.shouldSpawn() || mobTime == -1) {// -1 does not respawn and should not either but force ONE spawn
-            spawnMonster(sp.getMonster());
-        }
-    }
-    
     public void addAllMonsterSpawn(MapleMonster monster, int mobTime, int team) {
         Point newpos = calcPointBelow(monster.getPosition());
         newpos.y -= 1;
@@ -3972,10 +3962,5 @@ public class MapleMap {
         } finally {
             chrWLock.unlock();
         }
-    }
-    
-    public Collection<SpawnPoint> GetMonsterSpawn()
-    {
-        return PermMonsterSpawn;
     }
 }

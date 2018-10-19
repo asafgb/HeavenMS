@@ -29,7 +29,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jdk.nashorn.api.scripting.ScriptUtils;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
@@ -646,8 +645,7 @@ public class EventManager {
             Object p = iv.invokeFunction("getEligibleParty", party.getPartyMembers());
             
             if(p != null) {
-                //List<MaplePartyCharacter> lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
-                List<MaplePartyCharacter> lmpc = new ArrayList<>(((Map<String, MaplePartyCharacter>)(ScriptUtils.convert(p, Map.class))).values());
+                List<MaplePartyCharacter> lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
                 party.setEligibleMembers(lmpc);
                 return lmpc;
             }
