@@ -984,9 +984,32 @@ public class EventInstanceManager {
         }
         
         private List<Integer> convertToIntegerArray(List<Double> list) {
+            
+            Object[] objs=list.toArray();
+            List<Integer> intList=new ArrayList<Integer> (new ArrayList(java.util.Arrays.asList(objs)));
+             //List<Integer> intList= new ArrayList<>();
+             
+           
+            /*
                 List<Integer> intList = new ArrayList<>();
-                for(Double d: list) intList.add(d.intValue());
-
+                if(list.get(0).getClass().equals(Integer.class))
+                {
+                     for(double i: list)
+                    {
+                        intList.add((int)i);
+                    }
+                }
+                else
+                {
+                    for(Double d: list)
+                    {
+                        intList.add(d.intValue());
+                    }
+                }*/
+            //(
+            //jdk.nashorn.api.scripting.ScriptUtils.convert(list, Array[int]).asInstanceOf(Array[int]);
+           //new ArrayList<>((jdk.nashorn.api.scripting.ScriptUtils.convert(list, List.class)));
+                
                 return intList;
         }
         
