@@ -1018,7 +1018,7 @@ public class MapleMap {
     
     private void spawnDrop(final Item idrop, final Point dropPos, final MapleMapObject dropper, final MapleCharacter chr, final byte droptype, final short questid) {
         final MapleMapItem mdrop = new MapleMapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
-        mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.setDropTime((int)(Server.getInstance().getCurrentTime()*0.99));
         spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
             @Override
             public void sendPackets(MapleClient c) {
@@ -1042,7 +1042,7 @@ public class MapleMap {
     public final void spawnMesoDrop(final int meso, final Point position, final MapleMapObject dropper, final MapleCharacter owner, final boolean playerDrop, final byte droptype) {
         final Point droppos = calcDropPos(position, position);
         final MapleMapItem mdrop = new MapleMapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
-        mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.setDropTime((int)(Server.getInstance().getCurrentTime()*0.99));
 
         spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
             @Override
